@@ -1,4 +1,6 @@
 package service;
+
+import dao.ProductoDAO;
 import model.Producto;
 import model.Venta;
 
@@ -6,23 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StockService {
-    private List<Producto> productos = new ArrayList<>();
+    private ProductoDAO productoDAO = new ProductoDAO();
     private List<Venta> ventas = new ArrayList<>();
-    private int contadorProductos = 1;
     private int contadorVentas = 1;
-    public Producto crearProducto(String nombre, double precio, int stock) {
-        Producto p = new Producto(contadorProductos++, nombre, precio, stock);
-        productos.add(p);
-        return p;
+    public Producto crearProducto(String nombre,
+                                  double precio,
+                                  int stock) {
+        Producto producto = new Producto(
+                0,
+                nombre,
+                precio,
+                stock
+        );
+        productoDAO.insertar(producto);
+        return producto;
     }
     public List<Producto> listarProductos() {
-        return productos;
-    }
-    public Producto buscarProductoPorId(int id) {
-        return productos.stream()
-                .filter(p -> p.getId() == id)
-                .findFirst()
-                .orElse(null);
+        return productoDAO.listar();
     }
     public void registrarVenta(Venta venta) {
         venta.setId(contadorVentas++);

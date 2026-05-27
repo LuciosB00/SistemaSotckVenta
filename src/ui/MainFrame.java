@@ -1,6 +1,7 @@
 package ui;
 
 import service.StockService;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,13 +16,21 @@ public class MainFrame extends JFrame {
         initComponents();
     }
     private void initComponents() {
+        // BOTONES
         JButton btnProductos = new JButton("Gestión de Productos");
         JButton btnVentas = new JButton("Ventas");
         JButton btnSalir = new JButton("Salir");
+        // EVENTOS
         btnProductos.addActionListener(e ->
                 new ProductoFrame(service).setVisible(true)
         );
-        btnSalir.addActionListener(e -> System.exit(0));
+        btnVentas.addActionListener(e ->
+                new VentaFrame(service).setVisible(true)
+        );
+        btnSalir.addActionListener(e ->
+                System.exit(0)
+        );
+        // LAYOUT
         setLayout(new GridLayout(3, 1, 10, 10));
         add(btnProductos);
         add(btnVentas);

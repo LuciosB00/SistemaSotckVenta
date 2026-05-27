@@ -35,6 +35,7 @@ public class ProductoFrame extends JFrame {
         txtStock = new JTextField();
         panelForm.add(txtStock);
         JButton btnAgregar = new JButton("Agregar Producto");
+        getRootPane().setDefaultButton(btnAgregar);
         panelForm.add(btnAgregar);
         // Tabla
         modeloTabla = new DefaultTableModel(
@@ -77,5 +78,6 @@ public class ProductoFrame extends JFrame {
         txtNombre.setText("");
         txtPrecio.setText("");
         txtStock.setText("");
+        txtNombre.requestFocus();
     }
 }
