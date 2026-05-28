@@ -18,7 +18,6 @@ public class VentaFrame extends JFrame {
     private JLabel lblTotal;
     private Venta ventaActual;
     public VentaFrame(StockService service) {
-
         this.service = service;
         this.ventaActual = new Venta();
         setTitle("Ventas");

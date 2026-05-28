@@ -14,12 +14,35 @@ public class CrearTabla {
                     stock INTEGER NOT NULL
                 );
                 """;
+        String sqlVenta =
+                """
+                CREATE TABLE IF NOT EXISTS venta (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    fecha TEXT NOT NULL,
+                    total REAL NOT NULL
+                );
+                """;
+        String sqlDetalleVenta =
+                """
+                CREATE TABLE IF NOT EXISTS detalle_venta (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    venta_id INTEGER NOT NULL,
+                    producto_id INTEGER NOT NULL,
+                    cantidad INTEGER NOT NULL,
+                    precio_unitario REAL NOT NULL,
+                    subtotal REAL NOT NULL,
+                    FOREIGN KEY (venta_id) REFERENCES venta(id),
+                    FOREIGN KEY (producto_id) REFERENCES producto(id)
+                );
+                """;
         try (
                 Connection conn = ConexionDB.conectar();
                 Statement st = conn.createStatement()
         ) {
             st.execute(sqlProducto);
-            System.out.println("Tabla producto creada");
+            st.execute(sqlVenta);
+            st.execute(sqlDetalleVenta);
+            System.out.println("Tablas creadas correctamente");
         } catch (Exception e) {
             e.printStackTrace();
 

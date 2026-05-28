@@ -50,4 +50,66 @@ public class ProductoDAO {
         }
         return productos;
     }
+    public void actualizar(Producto producto) {
+        String sql =
+            """
+            UPDATE producto
+            SET nombre = ?,
+                precio = ?,
+                stock = ?
+            WHERE id = ?
+            
+            """;
+        try (
+                Connection conn = ConexionDB.conectar();
+                PreparedStatement ps =
+                        conn.prepareStatement(sql)
+        ) {
+            ps.setString(1, producto.getNombre());
+            ps.setDouble(2, producto.getPrecio());
+            ps.setInt(3, producto.getStock());
+            ps.setInt(4, producto.getId());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void eliminar(int id) {
+        String sql =
+            """
+            DELETE FROM producto
+            WHERE id = ?
+            
+            """;
+        try (
+                Connection conn = ConexionDB.conectar();
+                PreparedStatement ps =
+                        conn.prepareStatement(sql)
+        ) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void actualizarStock(int productoId,
+                                int nuevoStock) {
+        String sql =
+            """
+            UPDATE producto
+            SET stock = ?
+            WHERE id = ?
+            """;
+        try (
+                Connection conn = ConexionDB.conectar();
+                PreparedStatement ps =
+                        conn.prepareStatement(sql)
+        ) {
+            ps.setInt(1, nuevoStock);
+            ps.setInt(2, productoId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

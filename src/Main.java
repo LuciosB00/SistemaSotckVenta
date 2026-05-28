@@ -14,7 +14,6 @@ import service.StockService;
 import ui.MainFrame;
 
 public class Main {
-
     public static void main(String[] args) {
         CrearTabla.crear();
         StockService service = new StockService();

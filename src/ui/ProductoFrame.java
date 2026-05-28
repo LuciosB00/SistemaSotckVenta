@@ -24,7 +24,7 @@ public class ProductoFrame extends JFrame {
     }
     private void initComponents() {
         // Panel formulario
-        JPanel panelForm = new JPanel(new GridLayout(4, 2, 5, 5));
+        JPanel panelForm = new JPanel(new GridLayout(5, 2, 5, 5));
         panelForm.add(new JLabel("Nombre:"));
         txtNombre = new JTextField();
         panelForm.add(txtNombre);
@@ -35,8 +35,12 @@ public class ProductoFrame extends JFrame {
         txtStock = new JTextField();
         panelForm.add(txtStock);
         JButton btnAgregar = new JButton("Agregar Producto");
+        JButton btnEditar = new JButton("Editar");
+        JButton btnEliminar = new JButton("Eliminar");
         getRootPane().setDefaultButton(btnAgregar);
         panelForm.add(btnAgregar);
+        panelForm.add(btnEditar);
+        panelForm.add(btnEliminar);
         // Tabla
         modeloTabla = new DefaultTableModel(
                 new Object[]{"ID", "Nombre", "Precio", "Stock"}, 0);
@@ -44,9 +48,19 @@ public class ProductoFrame extends JFrame {
         JScrollPane scroll = new JScrollPane(tabla);
         // Evento botón
         btnAgregar.addActionListener(e -> agregarProducto());
+        btnEditar.addActionListener(e -> editarProducto());
+        btnEliminar.addActionListener(e -> eliminarProducto());
         setLayout(new BorderLayout());
         add(panelForm, BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
+        tabla.getSelectionModel().addListSelectionListener(e -> {
+            int fila = tabla.getSelectedRow();
+            if (fila != -1) {
+                txtNombre.setText(modeloTabla.getValueAt(fila, 1).toString());
+                txtPrecio.setText(modeloTabla.getValueAt(fila, 2).toString());
+                txtStock.setText(modeloTabla.getValueAt(fila, 3).toString());
+            }
+        });
     }
     private void agregarProducto() {
         try {
@@ -61,6 +75,55 @@ public class ProductoFrame extends JFrame {
                     "Precio y Stock deben ser números",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private void editarProducto() {
+        int fila = tabla.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione un producto");
+            return;
+        }
+        try {
+            int id = (int) modeloTabla.getValueAt(fila, 0);
+            String nombre = txtNombre.getText();
+            double precio =
+                    Double.parseDouble(txtPrecio.getText());
+            int stock =
+                    Integer.parseInt(txtStock.getText());
+            Producto producto = new Producto(
+                    id,
+                    nombre,
+                    precio,
+                    stock
+            );
+            service.actualizarProducto(producto);
+            cargarTabla();
+            limpiarCampos();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Datos inválidos");
+        }
+    }
+    private void eliminarProducto() {
+        int fila = tabla.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Seleccione un producto");
+
+            return;
+        }
+        int id = (int) modeloTabla.getValueAt(fila, 0);
+        int confirmacion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Eliminar producto?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION
+        );
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            service.eliminarProducto(id);
+            cargarTabla();
+            limpiarCampos();
         }
     }
     private void cargarTabla() {

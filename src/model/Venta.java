@@ -24,6 +24,10 @@ public class Venta {
         total += detalle.getSubtotal();
         detalle.getProducto().reducirStock(detalle.getCantidad());
     }
+    public void agregarDetalleHistorial(DetalleVenta detalle) {
+        detalles.add(detalle);
+        total += detalle.getSubtotal();
+    }
     @Override
     public String toString() {
         return "Venta #" + id + " - Total: $" + total + " - Fecha: " + fecha;

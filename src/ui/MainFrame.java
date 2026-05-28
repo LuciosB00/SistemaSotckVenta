@@ -19,6 +19,7 @@ public class MainFrame extends JFrame {
         // BOTONES
         JButton btnProductos = new JButton("Gestión de Productos");
         JButton btnVentas = new JButton("Ventas");
+        JButton btnHistorial = new JButton("Historial Ventas");
         JButton btnSalir = new JButton("Salir");
         // EVENTOS
         btnProductos.addActionListener(e ->
@@ -27,13 +28,17 @@ public class MainFrame extends JFrame {
         btnVentas.addActionListener(e ->
                 new VentaFrame(service).setVisible(true)
         );
+        btnHistorial.addActionListener(e ->
+                new HistorialVentasFrame(service).setVisible(true)
+        );
         btnSalir.addActionListener(e ->
                 System.exit(0)
         );
         // LAYOUT
-        setLayout(new GridLayout(3, 1, 10, 10));
+        setLayout(new GridLayout(4, 1, 10, 10));
         add(btnProductos);
         add(btnVentas);
+        add(btnHistorial);
         add(btnSalir);
     }
 }
