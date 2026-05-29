@@ -47,5 +47,14 @@ public class StockService {
     public void eliminarProducto(int id) {
         productoDAO.eliminar(id);
     }
+    public double obtenerTotalVendido() {
+        return ventaDAO.obtenerTotalVendido();
+    }
+    public int obtenerCantidadVentas() {
+        return ventaDAO.obtenerCantidadVentas();
+    }
+    public String obtenerProductoMasVendido() {
+        return ventaDAO.obtenerProductoMasVendido();
+    }
 
 }

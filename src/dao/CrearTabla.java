@@ -19,7 +19,9 @@ public class CrearTabla {
                 CREATE TABLE IF NOT EXISTS venta (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     fecha TEXT NOT NULL,
-                    total REAL NOT NULL
+                    estado TEXT NOT NULL,
+                    total REAL NOT NULL,
+                    monto_pagado REAL NOT NULL
                 );
                 """;
         String sqlDetalleVenta =
