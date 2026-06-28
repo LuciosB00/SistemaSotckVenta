@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class CrearTabla {
@@ -11,7 +12,8 @@ public class CrearTabla {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nombre TEXT NOT NULL,
                     precio REAL NOT NULL,
-                    stock INTEGER NOT NULL
+                    stock INTEGER NOT NULL,
+                    activo INTEGER NOT NULL DEFAULT 1
                 );
                 """;
         String sqlVenta =
@@ -44,10 +46,29 @@ public class CrearTabla {
             st.execute(sqlProducto);
             st.execute(sqlVenta);
             st.execute(sqlDetalleVenta);
+            agregarColumnaSiNoExiste(conn, "producto", "activo", "INTEGER NOT NULL DEFAULT 1");
             System.out.println("Tablas creadas correctamente");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("No se pudieron crear o migrar las tablas", e);
+        }
+    }
 
+    private static void agregarColumnaSiNoExiste(Connection conn,
+                                                String tabla,
+                                                String columna,
+                                                String definicion) throws Exception {
+        try (
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery("PRAGMA table_info(" + tabla + ")")
+        ) {
+            while (rs.next()) {
+                if (columna.equalsIgnoreCase(rs.getString("name"))) {
+                    return;
+                }
+            }
+        }
+        try (Statement st = conn.createStatement()) {
+            st.execute("ALTER TABLE " + tabla + " ADD COLUMN " + columna + " " + definicion);
         }
     }
 }
