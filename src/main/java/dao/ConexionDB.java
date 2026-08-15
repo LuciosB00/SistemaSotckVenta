@@ -13,8 +13,7 @@ public class ConexionDB {
         } catch (SQLException e) {
 
             throw new RuntimeException(
-                    "Error al conectar con SQLite",
-                    e
+                    "Error al conectar con SQLite", e
             );
         }
     }
